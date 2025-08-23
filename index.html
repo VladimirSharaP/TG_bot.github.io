@@ -59,13 +59,33 @@
   // Пример: "https://example.com/cards" или относительная папка "./cards"
   const CARDS_BASE_URL = "https://vladimirsharap.github.io/TG_bot.github.io/cards";
 
-  // Telegram WebApp
-  const tg = window.Telegram?.WebApp;
-  if (!tg) {
-    document.body.innerHTML = "<p>Откройте эту страницу внутри Telegram (Web App).</p>";
-    throw new Error("Not in Telegram WebApp");
-  }
-  tg.expand();
+  document.addEventListener('DOMContentLoaded', () => {
+    // Совместимая проверка (без ?. на случай старых сред)
+    const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+
+    if (!tg) {
+      // Показываем сообщение аккуратно в элементе, не стирая весь body
+      const info = document.getElementById('info') || document.createElement('div');
+      info.id = 'info';
+      info.textContent = 'Откройте эту страницу внутри Telegram (Web App).';
+      if (!document.getElementById('info')) document.body.prepend(info);
+
+      console.warn('Not in Telegram WebApp');
+      return;
+    }
+
+    // Делаем доступным глобально, если в других местах вы проверяете typeof tg
+    window.tg = tg;
+
+    // Можно попытаться развернуть Web App
+    try {
+      tg.expand();
+    } catch (e) {
+      console.warn('tg.expand() failed:', e);
+    }
+
+    // Любая другая инициализация WebApp
+  });
 
   // Telegram WebApp (tg предполагается доступным в окружении WebApp)
   const deckImg = document.getElementById("deck");
