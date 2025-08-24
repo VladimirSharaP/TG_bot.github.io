@@ -20,6 +20,54 @@
     #info { margin: 2px; min-height:18px; }
     #sendHint { font-size:12px; color:#666; margin-top:6px; }
   </style>
+  <script>
+  function findTelegramWebApp() {
+    return window.Telegram?.WebApp
+        || window.parent?.Telegram?.WebApp
+        || window.top?.Telegram?.WebApp
+        || null;
+  }
+
+  function waitForTelegramWebApp(timeout = 5000, interval = 150) {
+    const start = Date.now();
+    return new Promise(resolve => {
+      (function poll() {
+        const tg = findTelegramWebApp();
+        if (tg) return resolve(tg);
+        if (Date.now() - start > timeout) return resolve(null);
+        setTimeout(poll, interval);
+      })();
+    });
+  }
+
+  (async function init() {
+    const tg = await waitForTelegramWebApp(5000);
+    if (!tg) {
+      console.warn('Telegram.WebApp not found — возможно, открыто вне Telegram или объект ещё не внедрён.');
+      document.body.insertAdjacentHTML('beforeend',
+        '<div style="color:orange">Telegram WebApp object not found — open inside Telegram.</div>');
+      return;
+    }
+
+    // Сохраним ссылку для отладки
+    window.tg = tg;
+
+    try {
+      if (typeof tg.expand === 'function') {
+        tg.expand();
+        console.log('tg.expand() called');
+      } else {
+        console.info('tg.expand is not available in this client');
+      }
+    } catch (e) {
+      console.error('Error calling tg.expand():', e);
+    }
+
+    // Можно показать какие-то данные на странице:
+    document.body.insertAdjacentHTML('beforeend',
+      '<div style="color:green">Telegram WebApp ready. isExpanded: ' + !!tg.isExpanded + '</div>');
+  })();
+</script>
 </head>
 <body>
   <h2>Тянем 3 карты</h2>
@@ -123,43 +171,6 @@
     const deckEl = document.getElementById('deck');
     const resetBtn = document.getElementById('reset');
     const drawnContainer = document.getElementById('drawn');
-
-    // Telegram WebApp object (если открыт внутри Telegram)
-    function findTelegram() {
-      return window.Telegram?.WebApp || window.parent?.Telegram?.WebApp || null;
-    }
-
-    function whenTelegramReady(callback, timeout = 5000) {
-      const start = Date.now();
-      (function poll() {
-        const tg = findTelegram();
-        if (tg) return callback(tg);
-        if (Date.now() - start > timeout) return callback(null);
-        setTimeout(poll, 150);
-      })();
-    }
-
-    whenTelegramReady((tg) => {
-      if (!tg) {
-        console.warn('Telegram WebApp object not found — page probably opened outside Telegram.');
-        document.getElementById('info').textContent = 'Откройте страницу внутри Telegram.';
-        return;
-      } 
-
-      try {
-        if (typeof tg.expand === 'function') {
-          tg.expand();
-        } else {
-          console.info('tg.expand() is not available in this Telegram client.');
-        }
-      } catch (e) {
-        console.error('Error calling tg.expand():', e);
-      }
-
-      // теперь можно работать с tg
-      window.tg = tg;
-    });
-    whenTelegramReady();
 
     initDeck();
     updateInfo('Готово. Вытяните 3 карты.');
