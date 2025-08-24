@@ -11,7 +11,6 @@
     #deck:focus { outline: none; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); }
     h2 { margin: 7px; }
     p { margin: 0; }
-    #controls { margin-top: 0; height: 40px;}
     button { padding: 8px 12px; font-size: 16px; }
     #drawn { height: 195px; width: 350px; margin-top: 6px; display:flex; flex-wrap:wrap; justify-content:center; gap:12px; }
     .drawn-card { width:90px; text-align:center; border:1px solid #e0e0e0; padding:8px; border-radius:6px; background:#fafafa; }
@@ -71,9 +70,6 @@
   <p>Нажмите на колоду, чтобы вытянуть карту.</p>
   <div id="deck" alt="Deck" title="Нажмите, чтобы вытянуть карту"></div>
   <div id="info"></div>
-  <div id="controls">
-    <button id="reset" style="display:none;">Закрыть приложение</button>
-  </div>
   <div id="drawn"></div>
   <div id="sendHint"></div>
 
@@ -191,10 +187,6 @@
         // Отправляем данные боту
         sendSelectionToBot();
       }
-    });
-
-    resetBtn.addEventListener('click', () => {
-      window.Telegram.WebApp.close();
     });
   });
 </script>
