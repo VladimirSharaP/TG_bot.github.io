@@ -63,7 +63,10 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     // Совместимая проверка (без ?. на случай старых сред)
-    const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+    const tg = window.Telegram.WebApp;
+    console.log(tg.initData);           // подпись и данные в виде строки
+    console.log(tg.initDataUnsafe);    // разобранные поля: .user, .chat, ...
+
 
     if (!tg) {
       // Показываем сообщение аккуратно в элементе, не стирая весь body
