@@ -63,10 +63,6 @@
     } catch (e) {
       console.error('Error calling tg.expand():', e);
     }
-
-    // Можно показать какие-то данные на странице:
-    document.body.insertAdjacentHTML('beforeend',
-      '<div style="color:green">Telegram WebApp ready. isExpanded: ' + !!tg.isExpanded + '</div>');
   })();
 </script>
 </head>
@@ -106,8 +102,6 @@
 
   const CARDS_BASE_URL = "https://vladimirsharap.github.io/TG_bot.github.io/cards";
 
-  // State
-  let tg = null;
   let deck = [];
   let draws = [];
 
