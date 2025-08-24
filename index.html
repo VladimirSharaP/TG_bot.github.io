@@ -72,7 +72,7 @@
       // Показываем сообщение аккуратно в элементе, не стирая весь body
       const info = document.getElementById('info') || document.createElement('div');
       info.id = 'info';
-      info.textContent = 'Откройте эту страницу внутри Telegram (Web App).';
+      info.textContent = tg; //'Откройте эту страницу внутри Telegram (Web App).';
       if (!document.getElementById('info')) document.body.prepend(info);
 
       console.warn('Not in Telegram WebApp');
