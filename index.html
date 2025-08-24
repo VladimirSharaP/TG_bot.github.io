@@ -154,8 +154,10 @@
       }))
     };
     try {
-      window.tg.sendData(JSON.stringify(payload));
-      document.getElementById('sendHint').textContent = 'Выбор отправлен боту.';
+      setTimeout(() => {
+        window.tg.sendData(JSON.stringify(payload));
+        document.getElementById('sendHint').textContent = 'Выбор отправлен боту.';
+      }, 1500); // задержка 1.5 с
     } catch (err) {
       console.error('sendData error', err);
       document.getElementById('sendHint').textContent = 'Ошибка при отправке данных боту.';
