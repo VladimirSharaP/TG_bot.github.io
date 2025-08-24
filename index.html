@@ -140,21 +140,19 @@
     // Показываем краткую информацию
     info.innerHTML = `Вытянуто: ${draws.length + 1}/3`;
 
-    // Отправляем данные боту (если tg доступен)
-    try {
-      if (typeof tg !== 'undefined' && tg.sendData) {
-        tg.sendData(JSON.stringify(payload));
-      } else {
-        // В режиме разработки можно логировать
-        console.log('tg.sendData not available, payload:', payload);
-      }
-    } catch (e) {
-      console.error("sendData failed:", e);
-    }
-
-    draws.push(payload);
-
     if (draws.length >= 3) {
+      // Отправляем данные боту (если tg доступен)
+      try {
+        if (typeof tg !== 'undefined' && tg.sendData) {
+          tg.sendData(JSON.stringify(payload));
+        } else {
+          // В режиме разработки можно логировать
+          console.log('tg.sendData not available, payload:', payload);
+        }
+      } catch (e) {
+        console.error("sendData failed:", e);
+      }
+      draws.push(payload);
       resetBtn.style.display = "inline-block";
     }
   });
