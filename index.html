@@ -125,10 +125,41 @@
     const drawnContainer = document.getElementById('drawn');
 
     // Telegram WebApp object (если открыт внутри Telegram)
-    if (window.Telegram && window.Telegram.WebApp) {
-      tg = window.Telegram.WebApp;
-      try { tg.expand(); } catch (e) { /* ignore */ }
+    function findTelegram() {
+      return window.Telegram?.WebApp || window.parent?.Telegram?.WebApp || null;
     }
+
+    function whenTelegramReady(callback, timeout = 5000) {
+      const start = Date.now();
+      (function poll() {
+        const tg = findTelegram();
+        if (tg) return callback(tg);
+        if (Date.now() - start > timeout) return callback(null);
+        setTimeout(poll, 150);
+      })();
+    }
+
+    whenTelegramReady((tg) => {
+      if (!tg) {
+        console.warn('Telegram WebApp object not found — page probably opened outside Telegram.');
+        document.getElementById('info').textContent = 'Откройте страницу внутри Telegram.';
+        return;
+      } 
+
+      try {
+        if (typeof tg.expand === 'function') {
+          tg.expand();
+        } else {
+          console.info('tg.expand() is not available in this Telegram client.');
+        }
+      } catch (e) {
+        console.error('Error calling tg.expand():', e);
+      }
+
+      // теперь можно работать с tg
+      window.tg = tg;
+    });
+    whenTelegramReady();
 
     initDeck();
     updateInfo('Готово. Вытяните 3 карты.');
