@@ -20,7 +20,7 @@
 </head>
 <body>
   <h2>Тянем 3 карты</h2>
-  <p>Нажмите на колоду, чтобы вытянуть карту. Повторите 3 раза.</p>
+  <p>Нажмите на колоду, чтобы вытянуть карту.</p>
 
   <div id="deck" alt="Deck"></div>
   <div id="info"></div>
@@ -133,7 +133,7 @@
     cardEl.className = 'drawn-card';
     cardEl.innerHTML = `
       <img src="${imageUrl}" alt="${name}">
-      <div class="card-caption"><b>Карта ${payload.position}:</b> ${name}</div>
+      <div class="card-caption">${name}</div>
     `;
     drawnContainer.appendChild(cardEl);
 
