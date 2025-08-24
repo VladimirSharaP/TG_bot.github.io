@@ -131,11 +131,6 @@
     document.getElementById('drawn').appendChild(cardEl);
   }
 
-  function enableReset(show = true) {
-    const resetBtn = document.getElementById('reset');
-    resetBtn.style.display = show ? 'inline-block' : 'none';
-  }
-
   function sendSelectionToBot() {
     if (!window.tg) {
       document.getElementById('sendHint').textContent = 'Не в Telegram WebApp — данные не отправлены.';
@@ -170,7 +165,7 @@
 
     deckEl.addEventListener('click', () => {
       if (draws.length >= 3) {
-        updateInfo('Вы уже вытянули 3 карты. Нажмите "Сбросить и начать заново".');
+        updateInfo('Вы уже вытянули 3 карты.');
         return;
       }
       if (deck.length === 0) {
