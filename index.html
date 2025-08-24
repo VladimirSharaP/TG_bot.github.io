@@ -141,7 +141,7 @@
   }
 
   function sendSelectionToBot() {
-    if (!tg) {
+    if (!window.tg) {
       document.getElementById('sendHint').textContent = 'Не в Telegram WebApp — данные не отправлены.';
       return;
     }
@@ -154,7 +154,7 @@
       }))
     };
     try {
-      tg.sendData(JSON.stringify(payload));
+      window.tg.sendData(JSON.stringify(payload));
       document.getElementById('sendHint').textContent = 'Выбор отправлен боту.';
     } catch (err) {
       console.error('sendData error', err);
